@@ -8,17 +8,13 @@ export default async function (fastify, opts) {
     const pageNum = request.params.pageNum ? request.params.pageNum : 1;
     const pageSize = 20;
     if (!validator.isNumeric(pageNum) || pageNum < 1) {
-      return fastify.helper.resJson({}, 1, "invalid pageNum");
+      return fastify.helper.resErrJson(1, "invalid page");
     }
     const newsList = await fastify.NewsModel.findNewsList({
       page: pageNum,
       size: pageSize,
     });
     const newsCount = await fastify.NewsModel.findNewsCount();
-    return fastify.helper.resJson(
-      { total: newsCount, page: pageNum, size: pageSize, list: newsList },
-      0,
-      ""
-    );
+    return fastify.helper.resListJson(newsCount, pageNum, pageSize, newsList);
   });
 }

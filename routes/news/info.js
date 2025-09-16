@@ -9,10 +9,10 @@ export default async function (fastify, opts) {
     async function (request, reply) {
       const newsId = request.params.newsId ? request.params.newsId : "";
       if (validator.isEmpty(newsId)) {
-        return fastify.helper.resJson({}, 1, "invalid newsId");
+        return fastify.helper.resErrJson(1, "invalid id");
       }
       const newsInfo = await fastify.NewsModel.findNewsInfo(newsId);
-      return fastify.helper.resJson({ info: newsInfo }, 0, "");
+      return fastify.helper.resInfoJson(newsInfo);
     }
   );
 }
