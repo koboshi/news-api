@@ -25,6 +25,15 @@ const helper = {
   resErrJson: function (errCode, errMsg) {
     return this.resJson({}, errCode, errMsg);
   },
+
+  stripEOL: function (str) {
+    // 匹配所有的 \r\n, \n, \r 并替换为空字符串
+    return str.replace(/\r\n|\n|\r/g, "");
+  },
+
+  delay: function (ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  },
 };
 
 export default fp(

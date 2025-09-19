@@ -12,6 +12,8 @@ export default async function (fastify, opts) {
         return fastify.helper.resErrJson(1, "invalid id");
       }
       const newsInfo = await fastify.NewsModel.findNewsInfo(newsId);
+      newsInfo.content = newsInfo.content;
+      // await this.helper.delay(2000); //故意制造延迟，test
       return fastify.helper.resInfoJson(newsInfo);
     }
   );

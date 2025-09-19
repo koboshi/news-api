@@ -24,7 +24,6 @@ const news = {
       id: 1,
       content: 1,
       title: 1,
-      url: 1,
       createAt: 1,
       updateAt: 1,
       _id: 0,
@@ -39,7 +38,14 @@ const news = {
   findNewsList: function (
     page,
     where,
-    projection = { id: 1, title: 1, url: 1, createAt: 1, updateAt: 1, _id: 0 }
+    projection = {
+      id: 1,
+      title: 1,
+      createAt: 1,
+      updateAt: 1,
+      content: 1,
+      _id: 0,
+    }
   ) {
     const pageCond = Object.assign(
       {
@@ -53,7 +59,7 @@ const news = {
     const skip = (pageCond.page - 1) * pageCond.size;
     return this._model
       .find(whereCond)
-      .sort({ createAt: "desc" })
+      .sort({ createAt: "desc", _id: "desc" })
       .select(projection)
       .skip(skip)
       .limit(pageCond.size);

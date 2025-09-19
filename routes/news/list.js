@@ -10,12 +10,25 @@ export default async function (fastify, opts) {
       return fastify.helper.resErrJson(1, "invalid page");
     }
 
-    const pageSize = 20;
+    const pageSize = 10;
     const newsList = await fastify.NewsModel.findNewsList({
       page: pageNum,
       size: pageSize,
     });
+    const resultList = [];
+    for (const newsInfo of newsList) {
+      const ellipsis = newsInfo.content.substring(0, 35) + "...";
+      resultList.push({
+        id: newsInfo.id,
+        title: newsInfo.title,
+        ellipsis:
+          this.helper.stripEOL(newsInfo.content.substring(0, 35)) + "...",
+        createAt: newsInfo.createAt,
+        updateAt: newsInfo.updateAt,
+      });
+    }
     const newsCount = await fastify.NewsModel.findNewsCount();
-    return fastify.helper.resListJson(newsCount, pageNum, pageSize, newsList);
+    // await this.helper.delay(2000); //故意制造延迟，test
+    return fastify.helper.resListJson(newsCount, pageNum, pageSize, resultList);
   });
 }
